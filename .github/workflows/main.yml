@@ -25,13 +25,13 @@ jobs:
     - name: Build Kernel
       uses: ./
       with:
-          kernel-url: https://github.com/onlyu1106/kernel_xiaomi_lavender
-          kernel-branch: a13-cam
-          config: lavender_defconfig
+          kernel-url: https://github.com/djb77/samsung-kernel/tree/N95XX-ALL
+          kernel-branch: N95XX-ALL
+          config: exynos8895-greatlte_defconfig
           arch: arm64
           aosp-gcc: true
           aosp-clang: false
-          android-version: 10
+          android-version: 9
           other-clang-url: https://github.com/kdrag0n/proton-clang.git
           other-clang-branch: master
           disable-lto: true
