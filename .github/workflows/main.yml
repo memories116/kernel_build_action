@@ -25,7 +25,7 @@ jobs:
     - name: Build Kernel
       uses: ./
       with:
-          kernel-url: https://github.com/djb77/samsung-kernel/tree/N95XX-ALL
+          kernel-url: https://github.com/djb77/samsung-kernel
           kernel-branch: N95XX-ALL
           config: exynos8895-greatlte_defconfig
           arch: arm64
