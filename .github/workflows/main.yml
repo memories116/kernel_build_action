@@ -25,14 +25,16 @@ jobs:
     - name: Build Kernel
       uses: ./
       with:
-          kernel-url: https://github.com/RooGhz720/kernel_xiaomi_lavender
+          kernel-url: https://github.com/exynos-linux-stable/greatlte
           kernel-dir: kernel
-          kernel-branch: a13-cam
-          config: lavender_defconfig
+          kernel-branch: tw90-android
+          config: greatlte_defconfig
           arch: arm64
+          ksu: true
+          ksu-version: main
           aosp-gcc: true
           aosp-clang: true
-          android-version: 10
+          android-version: 9
           aosp-clang-version: r383902
           disable-lto: true
           anykernel3: true
