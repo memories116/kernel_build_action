@@ -25,9 +25,9 @@ jobs:
     - name: Build Kernel
       uses: ./
       with:
-          kernel-url: https://github.com/onlyu1106/kernel_xiaomi_lavender
-          kernel-branch: a13-cam
-          config: lavender_defconfig
+          kernel-url: https://github.com/onlyu1106/android_kernel_samsung_msm8998
+          kernel-branch: pp
+          config: greatqlte_chn_open_defconfig
           arch: arm64
           ksu: true
           ksu-version: main
