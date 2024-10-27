@@ -30,8 +30,6 @@ jobs:
           kernel-branch: a13-cam
           config: lavender_defconfig
           arch: arm64
-          ksu: true
-          ksu-version: main
           aosp-gcc: true
           aosp-clang: false
           android-version: 10
