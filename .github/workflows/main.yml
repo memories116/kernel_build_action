@@ -29,6 +29,8 @@ jobs:
           kernel-branch: N95XX-ALL
           config: exynos8895-greatlte_defconfig
           arch: arm64
+          ksu: true
+          ksu-version: main
           aosp-gcc: true
           aosp-clang: false
           android-version: 9
