@@ -28,7 +28,7 @@ jobs:
           kernel-url: https://github.com/Hazama25/kernel_xiaomi_lavender
           kernel-dir: kernel
           kernel-branch: pie
-          config: lavender_defconfig
+          config: lavender-perf_defconfig
           arch: arm64
           ksu: true
           ksu-version: main
