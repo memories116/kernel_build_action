@@ -33,9 +33,9 @@ jobs:
           ksu: true
           ksu-version: main
           aosp-gcc: true
-          aosp-clang: true
+          aosp-clang: false
           android-version: 9
-          aosp-clang-version: r328903
+          other-clang-url: https://github.com/kdrag0n/proton-clang
           disable-lto: true
           anykernel3: true
     - name: Upload Kernel Artifacts
