@@ -32,7 +32,7 @@ jobs:
           ksu: true
           ksu-version: main
           aosp-gcc: true
-          aosp-clang: false
+          aosp-clang: true
           android-version: 9
           other-clang-url: https://github.com/kdrag0n/proton-clang.git
           other-clang-branch: master
