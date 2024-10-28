@@ -1,4 +1,5 @@
 name: CI
+
 on:
   push:
     branches: main
@@ -8,10 +9,10 @@ jobs:
   lint:
     uses: ./.github/workflows/check.yml
 
-  ci-test:
+  build-kernel:
     needs:
       - lint
-    name: Build Kernel
+    name: Build Kernel for Galaxy Note 8 with KernelSU
     strategy:
       fail-fast: false
     runs-on: ubuntu-20.04
@@ -19,27 +20,51 @@ jobs:
       contents: write
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      # Bước 1: Checkout mã nguồn của repository
+      - name: Checkout
+        uses: actions/checkout@v4
 
-    - name: Build Kernel
-      uses: ./
-      with:
-          kernel-url: https://github.com/onlyu1106/android_kernel_samsung_universal8895
-          kernel-branch: pie
-          config: exynos8895_greatlte_defconfig
-          arch: arm64
-          ksu: true
-          ksu-version: main
-          aosp-gcc: true
-          aosp-clang: true
-          android-version: 9
-          other-clang-url: https://github.com/kdrag0n/proton-clang.git
-          other-clang-branch: master
-          disable-lto: true
-          anykernel3: true
-    - name: Upload Kernel Artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: kernel-artifact
-        path: path/to/your/kernel/output/*
+      # Bước 2: Cài đặt các công cụ build cần thiết
+      - name: Set up Environment
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential bc curl flex bison \
+          libssl-dev libncurses5-dev libelf-dev
+
+      # Bước 3: Clone mã nguồn kernel cho Galaxy Note 8
+      - name: Clone Kernel Source
+        run: |
+          git clone --depth=1 -b pie https://github.com/onlyu1106/android_kernel_samsung_universal8895 kernel-source
+
+      # Bước 4: Clone Clang từ repository khác nếu cần
+      - name: Clone Additional Clang (Proton Clang)
+        run: |
+          git clone --depth=1 -b master https://github.com/kdrag0n/proton-clang.git clang
+
+      # Bước 5: Cấu hình và build kernel với các cờ KernelSU và AnyKernel3
+      - name: Build Kernel
+        working-directory: kernel-source
+        run: |
+          # Sử dụng file cấu hình mặc định
+          make ARCH=arm64 exynos8895_greatlte_defconfig
+          
+          # Nếu sử dụng KernelSU, tích hợp mã nguồn
+          if [ "${{ inputs.ksu }}" == "true" ]; then
+            git clone -b ${{ inputs.ksu-version }} https://github.com/tiann/KernelSU.git KernelSU
+            cp -rf KernelSU/* .
+          fi
+          
+          # Thiết lập các biến môi trường cho clang và gcc
+          export PATH="$PWD/clang/bin:$PATH"
+          export CLANG_TRIPLE=aarch64-linux-gnu-
+          export CROSS_COMPILE=aarch64-linux-android-
+          
+          # Build kernel
+          make -j$(nproc) ARCH=arm64 CC=clang CROSS_COMPILE=aarch64-linux-gnu- O=out
+
+      # Bước 6: Upload Kernel Artifacts lên GitHub
+      - name: Upload Kernel Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: kernel-artifact
+          path: kernel-source/out/arch/arm64/boot/*
